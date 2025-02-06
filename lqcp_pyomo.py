@@ -26,13 +26,10 @@ def solve_lqcp(solve_f, N):
     model.u = pyo.Var(model.ms, bounds=(-1.0, 1.0))
     yt = {j: 0.5 * (1 - (j * model.dx) ** 2) for j in range(0, model.n + 1)}
     model.obj = pyo.Objective(
-        expr=1 / 4 * model.dx * ((model.y[model.m, 0] - yt[0])) ** 2
+        expr=
+        1 / 4 * model.dx * ((model.y[model.m, 0] - yt[0])) ** 2
         + 2 * sum((model.y[model.m, j] - yt[j]) ** 2 for j in range(1, model.n))
-        + (model.y[model.m, model.n] - yt[model.n]) ** 2
-        + 1
-        / 4
-        * model.a
-        * model.dt
+        + (model.y[model.m, model.n] - yt[model.n]) ** 2 + 1 / 4 * model.a * model.dt
         * (2 * sum(model.u[i] ** 2 for i in range(1, model.m)) + model.u[model.m] ** 2)
     )
 
