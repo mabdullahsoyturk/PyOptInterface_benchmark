@@ -11,20 +11,18 @@ def solve_facility(solver, G, F):
     M = 2 * 1.414
     m = gp.Container()
     with m:
-        grid = gp.Set(name="grid", records=range(G + 1))
-        grid2 = gp.Alias(name="grid2", alias_with=grid)
-        facs = gp.Set(name="facs", records=range(1, F + 1))
-        dims = gp.Set(name="dims", records=range(1, 3))
-        y = gp.Variable(name="y", domain=[facs, dims])
+        grid = gp.Set(records=range(G + 1))
+        grid2 = gp.Alias(alias_with=grid)
+        facs = gp.Set(records=range(1, F + 1))
+        dims = gp.Set(records=range(1, 3))
+        y = gp.Variable(domain=[facs, dims])
         y.lo = 0
         y.up = 1
-        s = gp.Variable(name="s", domain=[grid, grid2, facs])
+        s = gp.Variable(domain=[grid, grid2, facs])
         s.lo = 0
-        z = gp.Variable(
-            name="z", domain=[grid, grid2, facs], type=gp.VariableType.BINARY
-        )
-        r = gp.Variable(name="r", domain=[grid, grid2, facs, dims])
-        d = gp.Variable(name="d")
+        z = gp.Variable(domain=[grid, grid2, facs], type=gp.VariableType.BINARY)
+        r = gp.Variable(domain=[grid, grid2, facs, dims])
+        d = gp.Variable()
 
         assmt = gp.Equation(domain=[grid, grid2])
         assmt[...] = gp.Sum(facs, z[grid, grid2, facs]) == 1
@@ -32,7 +30,7 @@ def solve_facility(solver, G, F):
         quadrhs = gp.Equation(domain=[grid, grid2, facs])
         quadrhs[...] = s[grid, grid2, facs] == d + M * (1 - z[grid, grid2, facs])
 
-        quaddistk1 = gp.Equation(name="quaddistk1", domain=[grid, grid2, facs])
+        quaddistk1 = gp.Equation(domain=[grid, grid2, facs])
         quaddistk1[...] = r[grid, grid2, facs, "1"] == (1 * grid.val) / G - y[facs, "1"]
 
         quaddistk2 = gp.Equation(domain=[grid, grid2, facs])

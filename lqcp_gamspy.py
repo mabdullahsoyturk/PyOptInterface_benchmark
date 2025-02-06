@@ -1,7 +1,10 @@
+import logging
 import sys
 import gamspy as gp
 import os
 import time
+
+logging.disable(logging.WARNING)
 
 
 def solve_lqcp(solver, N):
@@ -14,22 +17,22 @@ def solve_lqcp(solver, N):
         dt = T / n
         h2 = dx**2
         a = 0.001
-        ns = gp.Set(name="ns", records=range(n + 1))
-        ms = gp.Alias(name="ms", alias_with=ns)
-        yt = gp.Parameter(name="yt", domain=ns)
+        ns = gp.Set(records=range(n + 1))
+        ms = gp.Alias(alias_with=ns)
+        yt = gp.Parameter(domain=ns)
 
-        y = gp.Variable(name="y", domain=[ms, ns])
+        y = gp.Variable(domain=[ms, ns])
         y.lo = 0
         y.up = 1
-        u = gp.Variable(name="u", domain=ms)
+        u = gp.Variable(domain=ms)
         u.lo = -1.0
         u.up = 1.0
         yt[ns] = 0.5 * (1 - (ns.val * dx) ** 2)
 
-        pde = gp.Equation(name="pde", domain=[ns, ms])
-        ic = gp.Equation(name="ic", domain=ns)
-        bc1 = gp.Equation(name="bc1", domain=ns)
-        bc2 = gp.Equation(name="bc2", domain=ns)
+        pde = gp.Equation(domain=[ns, ms])
+        ic = gp.Equation(domain=ns)
+        bc1 = gp.Equation(domain=ns)
+        bc2 = gp.Equation(domain=ns)
 
         obj = (
             1 / 4 * dx * (y[str(m), "0"] - yt["0"]) ** 2
