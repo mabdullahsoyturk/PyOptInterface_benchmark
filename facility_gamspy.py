@@ -51,7 +51,6 @@ def solve_facility(solver, G, F):
             sense=gp.Sense.MIN,
             objective=d,
         )
-        m.addGamsCode("facility.justscrdir = 0;")
         model.solve(solver=solver, options=gp.Options(time_limit=0))
 
 

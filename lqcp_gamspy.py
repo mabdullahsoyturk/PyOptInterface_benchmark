@@ -70,7 +70,6 @@ def solve_lqcp(solver, N):
             sense=gp.Sense.MIN,
             objective=obj,
         )
-        container.addGamsCode("lqcp.justscrdir = 0;")
         model.solve(solver=solver, options=gp.Options(time_limit=0))
 
 
