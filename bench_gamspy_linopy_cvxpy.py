@@ -10,11 +10,10 @@ def solve_gamspy_model(N: int, solver: str) -> None:
     with m:
         i = gp.Set(records=range(N))
         j = gp.Alias(alias_with=i)
-        a = gp.Parameter(domain=i, records=np.arange(N))
         x = gp.Variable(domain=[i, j])
         y = gp.Variable(domain=[i, j])
         eq1 = gp.Equation(domain=[i, j])
-        eq1[i, j] = x[i, j] - y[i, j] >= a[i]
+        eq1[i, j] = x[i, j] - y[i, j] >= i.val
         eq2 = gp.Equation(domain=[i, j])
         eq2[i, j] = x[i, j] + y[i, j] >= 0
         obj = 2 * gp.Sum((i, j), x[i, j]) + gp.Sum((i, j), y[i, j])
