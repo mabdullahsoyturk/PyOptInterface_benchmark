@@ -40,7 +40,7 @@ def solve_facility(solver, G, F):
 
         quaddist = gp.Equation(domain=[grid, grid2, facs])
         quaddist[...] = (
-            r[grid, grid2, facs, "1"] ** 2 + r[grid, grid2, facs, "2"]
+            r[grid, grid2, facs, "1"] ** 2 + r[grid, grid2, facs, "2"] ** 2
             <= s[grid, grid2, facs] ** 2
         )
 

@@ -45,8 +45,8 @@ def solve_lqcp(solver, N):
             * (2 * gp.Sum(ms.where[gp.Ord(ms) > 1], u[ms] ** 2) + u[str(m)] ** 2)
         )
 
-        pde[ns, ms].where[(gp.Ord(ns) < gp.Card(ns)) & gp.Ord(ms) > 1] = (
-            y[ns + 1, ms] - y[ms, ms]
+        pde[ns, ms].where[(gp.Ord(ns) < gp.Card(ns)) & (gp.Ord(ms) > 1) & (gp.Ord(ms) < gp.Card(ms))] = (
+            y[ns + 1, ms] - y[ns, ms]
         ) / dt == 0.5 * (
             y[ns, ms - 1]
             - 2 * y[ns, ms]
@@ -56,10 +56,10 @@ def solve_lqcp(solver, N):
             + y[ns + 1, ms + 1]
         ) / h2
         ic[ns] = y["0", ns] == 0
-        bc1[ns].where[gp.Ord(ns) > 1] = (
+        bc1[ns].where[(gp.Ord(ns) > 1) & (gp.Ord(ns) < gp.Card(ns))] = (
             y[ns, "2"] - 4 * y[ns, "1"] + 3 * y[ns, "0"] == 0
         )
-        bc2[ns].where[gp.Ord(ns) > 1] = y[ns, str(n - 2)] - 4 * y[
+        bc2[ns].where[(gp.Ord(ns) > 1) & (gp.Ord(ns) < gp.Card(ns))] = y[ns, str(n - 2)] - 4 * y[
             ns, str(n - 1)
         ] + 3 * y[ns, str(n)] == (2 * dx) * (u[ns] - y[ns, str(n)])
 
